@@ -9,11 +9,11 @@ enum CAFilter:Int{
   var filter:String{
     switch self {
     case .linear:
-      return kCAFilterLinear
+        return CALayerContentsFilter.linear.rawValue
     case .nearest:
-      return kCAFilterNearest
+        return CALayerContentsFilter.nearest.rawValue
     case .trilinear:
-      return kCAFilterTrilinear
+        return CALayerContentsFilter.trilinear.rawValue
     }
   }
 

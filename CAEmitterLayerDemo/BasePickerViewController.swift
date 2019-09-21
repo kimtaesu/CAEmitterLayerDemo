@@ -75,11 +75,11 @@ class BasePickerViewController: UIViewController {
     
   }
 
-  func onCancelButtonPressed(){
+  @objc func onCancelButtonPressed(){
       dismiss(animated: true, completion: nil)
   }
   
-  func onDoneButtonPressed(){
+  @objc func onDoneButtonPressed(){
     dismiss(animated: true, completion: nil)
   }
 

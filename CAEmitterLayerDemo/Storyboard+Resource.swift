@@ -1,109 +1,80 @@
 // Generated using SwiftGen, by O.Halligon — https://github.com/SwiftGen/SwiftGen
 
+// swiftlint:disable sorted_imports
 import Foundation
 import UIKit
 
+// swiftlint:disable superfluous_disable_command
 // swiftlint:disable file_length
-// swiftlint:disable line_length
-// swiftlint:disable type_body_length
 
-protocol StoryboardSceneType {
+internal protocol StoryboardType {
   static var storyboardName: String { get }
 }
 
-extension StoryboardSceneType {
-  static func storyboard() -> UIStoryboard {
+internal extension StoryboardType {
+  static var storyboard: UIStoryboard {
     return UIStoryboard(name: self.storyboardName, bundle: Bundle(for: BundleToken.self))
   }
+}
 
-  static func initialViewController() -> UIViewController {
-    guard let vc = storyboard().instantiateInitialViewController() else {
-      fatalError("Failed to instantiate initialViewController for \(self.storyboardName)")
+internal struct SceneType<T: Any> {
+  internal let storyboard: StoryboardType.Type
+  internal let identifier: String
+
+  internal func instantiate() -> T {
+    guard let controller = storyboard.storyboard.instantiateViewController(withIdentifier: identifier) as? T else {
+      fatalError("ViewController '\(identifier)' is not of the expected class \(T.self).")
     }
-    return vc
+    return controller
   }
 }
 
-extension StoryboardSceneType where Self: RawRepresentable, Self.RawValue == String {
-  func viewController() -> UIViewController {
-    return Self.storyboard().instantiateViewController(withIdentifier: self.rawValue)
-  }
-  static func viewController(identifier: Self) -> UIViewController {
-    return identifier.viewController()
+internal struct InitialSceneType<T: Any> {
+  internal let storyboard: StoryboardType.Type
+
+  internal func instantiate() -> T {
+    guard let controller = storyboard.storyboard.instantiateInitialViewController() as? T else {
+      fatalError("ViewController is not of the expected class \(T.self).")
+    }
+    return controller
   }
 }
 
-protocol StoryboardSegueType: RawRepresentable { }
+internal protocol SegueType: RawRepresentable { }
 
-extension UIViewController {
-  func perform<S: StoryboardSegueType>(segue: S, sender: Any? = nil) where S.RawValue == String {
+internal extension UIViewController {
+  func perform<S: SegueType>(segue: S, sender: Any? = nil) where S.RawValue == String {
     performSegue(withIdentifier: segue.rawValue, sender: sender)
   }
 }
 
-enum StoryboardScene {
-  enum LaunchScreen: StoryboardSceneType {
-    static let storyboardName = "LaunchScreen"
+// swiftlint:disable explicit_type_interface identifier_name line_length type_body_length type_name
+internal enum StoryboardScene {
+  internal enum LaunchScreen: StoryboardType {
+    internal static let storyboardName = "LaunchScreen"
+
+    internal static let initialScene = InitialSceneType<UIViewController>(storyboard: LaunchScreen.self)
   }
-  enum Main: String, StoryboardSceneType {
-    static let storyboardName = "Main"
+  internal enum Main: StoryboardType {
+    internal static let storyboardName = "Main"
 
-    static func initialViewController() -> CAEmitterLayerDemo.MainViewController {
-      guard let vc = storyboard().instantiateInitialViewController() as? CAEmitterLayerDemo.MainViewController else {
-        fatalError("Failed to instantiate initialViewController for \(self.storyboardName)")
-      }
-      return vc
-    }
+    internal static let initialScene = InitialSceneType<CAEmitterLayerDemo.MainViewController>(storyboard: Main.self)
 
-    case colorCtrlScene = "colorCtrl"
-    static func instantiateColorCtrl() -> CAEmitterLayerDemo.ColorCtrlViewController {
-      guard let vc = StoryboardScene.Main.colorCtrlScene.viewController() as? CAEmitterLayerDemo.ColorCtrlViewController
-      else {
-        fatalError("ViewController 'colorCtrl' is not of the expected class CAEmitterLayerDemo.ColorCtrlViewController.")
-      }
-      return vc
-    }
+    internal static let colorCtrl = SceneType<CAEmitterLayerDemo.ColorCtrlViewController>(storyboard: Main.self, identifier: "colorCtrl")
 
-    case contentCtrlScene = "contentCtrl"
-    static func instantiateContentCtrl() -> CAEmitterLayerDemo.ContentCtrlViewController {
-      guard let vc = StoryboardScene.Main.contentCtrlScene.viewController() as? CAEmitterLayerDemo.ContentCtrlViewController
-      else {
-        fatalError("ViewController 'contentCtrl' is not of the expected class CAEmitterLayerDemo.ContentCtrlViewController.")
-      }
-      return vc
-    }
+    internal static let contentCtrl = SceneType<CAEmitterLayerDemo.ContentCtrlViewController>(storyboard: Main.self, identifier: "contentCtrl")
 
-    case emitterLayerCtrlScene = "emitterLayerCtrl"
-    static func instantiateEmitterLayerCtrl() -> CAEmitterLayerDemo.EmitterLayerViewController {
-      guard let vc = StoryboardScene.Main.emitterLayerCtrlScene.viewController() as? CAEmitterLayerDemo.EmitterLayerViewController
-      else {
-        fatalError("ViewController 'emitterLayerCtrl' is not of the expected class CAEmitterLayerDemo.EmitterLayerViewController.")
-      }
-      return vc
-    }
+    internal static let emitterLayerCtrl = SceneType<CAEmitterLayerDemo.EmitterLayerViewController>(storyboard: Main.self, identifier: "emitterLayerCtrl")
 
-    case motionAndTemporalCtrlScene = "motionAndTemporalCtrl"
-    static func instantiateMotionAndTemporalCtrl() -> CAEmitterLayerDemo.MotionAndTemporalCtrlViewController {
-      guard let vc = StoryboardScene.Main.motionAndTemporalCtrlScene.viewController() as? CAEmitterLayerDemo.MotionAndTemporalCtrlViewController
-      else {
-        fatalError("ViewController 'motionAndTemporalCtrl' is not of the expected class CAEmitterLayerDemo.MotionAndTemporalCtrlViewController.")
-      }
-      return vc
-    }
+    internal static let motionAndTemporalCtrl = SceneType<CAEmitterLayerDemo.MotionAndTemporalCtrlViewController>(storyboard: Main.self, identifier: "motionAndTemporalCtrl")
 
-    case scaleAndFilterCtrlScene = "scaleAndFilterCtrl"
-    static func instantiateScaleAndFilterCtrl() -> CAEmitterLayerDemo.ScaleAndFilterCtrlViewController {
-      guard let vc = StoryboardScene.Main.scaleAndFilterCtrlScene.viewController() as? CAEmitterLayerDemo.ScaleAndFilterCtrlViewController
-      else {
-        fatalError("ViewController 'scaleAndFilterCtrl' is not of the expected class CAEmitterLayerDemo.ScaleAndFilterCtrlViewController.")
-      }
-      return vc
-    }
+    internal static let scaleAndFilterCtrl = SceneType<CAEmitterLayerDemo.ScaleAndFilterCtrlViewController>(storyboard: Main.self, identifier: "scaleAndFilterCtrl")
   }
 }
 
-enum StoryboardSegue {
+internal enum StoryboardSegue {
 }
+// swiftlint:enable explicit_type_interface identifier_name line_length type_body_length type_name
 
 private final class BundleToken {}
 

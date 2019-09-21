@@ -46,9 +46,9 @@ class EmitterLayerViewController: UIViewController{
     depthTextField.text = layer.emitterDepth.description
 
 
-    emitterModeButton.setTitle(layer.emitterMode, for: .normal)
-    emitterShapeButton.setTitle(layer.emitterShape, for: .normal)
-    renderModeButton.setTitle(layer.renderMode, for: .normal)
+    emitterModeButton.setTitle(layer.emitterMode.rawValue, for: .normal)
+    emitterShapeButton.setTitle(layer.emitterShape.rawValue, for: .normal)
+    renderModeButton.setTitle(layer.renderMode.rawValue, for: .normal)
   }
 
   @IBOutlet weak var xSlider: UISlider!
@@ -186,7 +186,7 @@ class EmitterLayerViewController: UIViewController{
 
   @IBAction func chooseRenderMode() {
     pick(from: RenderMode.allCases, title: "Render Mode") { (item) in
-      self.emitter?.renderMode = item.mode
+        self.emitter?.renderMode = CAEmitterLayerRenderMode(rawValue: item.mode)
       self.emitter?.setValue(item.mode, forKeyPath: "renderMode")
       self.renderModeButton.setTitle(item.title, for: .normal)
     }
@@ -222,10 +222,10 @@ enum EmitterMode :String {
 
   var mode:String{
     switch self{
-    case .points:return kCAEmitterLayerPoints
-    case .outline:return kCAEmitterLayerOutline
-    case .surface:return kCAEmitterLayerSurface
-    case .volume:return kCAEmitterLayerVolume
+    case .points:return CAEmitterLayerEmitterMode.points.rawValue
+    case .outline:return CAEmitterLayerEmitterMode.outline.rawValue
+    case .surface:return CAEmitterLayerEmitterMode.surface.rawValue
+    case .volume:return CAEmitterLayerEmitterMode.volume.rawValue
     }
   }
 
@@ -260,12 +260,12 @@ enum EmitterShape :String {
 
   var shape:String{
     switch self{
-    case .point:return kCAEmitterLayerPoint
-    case .line:return kCAEmitterLayerLine
-    case .rectangle:return kCAEmitterLayerRectangle
-    case .cuboid:return kCAEmitterLayerCuboid
-    case .circle:return kCAEmitterLayerCircle
-    case .sphere:return kCAEmitterLayerSphere
+    case .point:return CAEmitterLayerEmitterShape.point.rawValue
+    case .line:return CAEmitterLayerEmitterShape.line.rawValue
+    case .rectangle:return CAEmitterLayerEmitterShape.rectangle.rawValue
+    case .cuboid:return CAEmitterLayerEmitterShape.cuboid.rawValue
+    case .circle:return CAEmitterLayerEmitterShape.circle.rawValue
+    case .sphere:return CAEmitterLayerEmitterShape.sphere.rawValue
     }
   }
 
@@ -297,11 +297,11 @@ enum RenderMode :String {
 
   var mode:String{
     switch self{
-    case .unordered:return kCAEmitterLayerUnordered
-    case .additive:return kCAEmitterLayerAdditive
-    case .backToFront:return kCAEmitterLayerBackToFront
-    case .oldestLast:return kCAEmitterLayerOldestLast
-    case .oldestFirst:return kCAEmitterLayerOldestFirst
+    case .unordered:return CAEmitterLayerRenderMode.unordered.rawValue
+    case .additive:return CAEmitterLayerRenderMode.additive.rawValue
+    case .backToFront:return CAEmitterLayerRenderMode.backToFront.rawValue
+    case .oldestLast:return CAEmitterLayerRenderMode.oldestLast.rawValue
+    case .oldestFirst:return CAEmitterLayerRenderMode.oldestFirst.rawValue
     }
   }
 

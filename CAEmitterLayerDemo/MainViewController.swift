@@ -19,11 +19,11 @@ class MainViewController: UIViewController {
   @IBOutlet weak var containerView: UIView!
   @IBOutlet weak var presetButton: UIButton!
 
-  let emitterCtrl = Main.instantiateEmitterLayerCtrl()
-  let colorCtrl = Main.instantiateColorCtrl()
-  let motionCtrl  = Main.instantiateMotionAndTemporalCtrl()
-  let scaleCtrl = Main.instantiateScaleAndFilterCtrl()
-  let contentCtrl = Main.instantiateContentCtrl()
+    let emitterCtrl = Main.emitterLayerCtrl.instantiate()
+    let colorCtrl = Main.colorCtrl.instantiate()
+    let motionCtrl  = Main.motionAndTemporalCtrl.instantiate()
+    let scaleCtrl = Main.scaleAndFilterCtrl.instantiate()
+    let contentCtrl = Main.contentCtrl.instantiate()
 
   var segCtrls:[UIViewController]{
     return [emitterCtrl,scaleCtrl, motionCtrl, colorCtrl,contentCtrl]
@@ -57,12 +57,12 @@ class MainViewController: UIViewController {
   var previousController:UIViewController?
   func switchToController(controller:UIViewController){
     previousController?.view.removeFromSuperview()
-    previousController?.removeFromParentViewController()
+    previousController?.removeFromParent()
     
-    addChildViewController(controller)
+    addChild(controller)
     controller.view.frame = containerView.bounds
     containerView.addSubview(controller.view)
-    controller.didMove(toParentViewController: self)
+    controller.didMove(toParent: self)
     previousController = controller
   }
 
@@ -125,10 +125,10 @@ class MainViewController: UIViewController {
   lazy var defaultEmitter:CAEmitterLayer = {
     let emitter = CAEmitterLayer()
     // configure emitter
-    emitter.renderMode = kCAEmitterLayerAdditive
+    emitter.renderMode = .additive
     emitter.emitterPosition = CGPoint(x:emitter.frame.midX,y:emitter.frame.midY)
     emitter.emitterSize = CGSize(width: 10, height: 10)
-    emitter.emitterShape = kCAEmitterLayerRectangle
+    emitter.emitterShape = .rectangle
 
     // create particle template
     let emitterCell = CAEmitterCell()
@@ -157,8 +157,8 @@ class MainViewController: UIViewController {
       let emitter  = CAEmitterLayer()
     emitter.emitterPosition = CGPoint(x: 100, y: 30)
     emitter.emitterSize = CGSize(width: UIScreen.main.bounds.width, height: 0)
-    emitter.emitterMode = kCAEmitterLayerOutline
-    emitter.emitterShape =  kCAEmitterLayerLine
+    emitter.emitterMode = .outline
+    emitter.emitterShape =  .line
 
     emitter.shadowOpacity = 1.0
     emitter.shadowRadius = 0.0
@@ -190,9 +190,9 @@ class MainViewController: UIViewController {
       let bounds = self.effectView.bounds
       emitter.emitterPosition = CGPoint(x: bounds.midX, y: bounds.maxY)
       emitter.emitterSize = CGSize(width: bounds.width * 0.5, height: 0)
-      emitter.emitterMode = kCAEmitterLayerOutline
-      emitter.emitterShape =  kCAEmitterLayerLine
-      emitter.renderMode = kCAEmitterLayerAdditive
+    emitter.emitterMode = .outline
+    emitter.emitterShape =  .line
+    emitter.renderMode = .additive
 
     let rocket = CAEmitterCell()
      rocket.birthRate = 1.0
@@ -251,7 +251,7 @@ class MainViewController: UIViewController {
     let bounds = self.effectView.bounds
     emitter.emitterPosition = CGPoint(x: bounds.midX, y: bounds.maxY)
     emitter.emitterSize = CGSize(width: bounds.width - 100, height: 20)
-    emitter.renderMode = kCAEmitterLayerAdditive
+    emitter.renderMode = .additive
 
     //
     let fire = CAEmitterCell()
@@ -296,8 +296,8 @@ class MainViewController: UIViewController {
     let bounds = self.effectView.bounds
     emitter.emitterPosition = CGPoint(x: bounds.midX, y: bounds.maxY)
     emitter.emitterSize = CGSize(width: 4, height: 20)
-    emitter.renderMode = kCAEmitterLayerAdditive
-    emitter.emitterShape = kCAEmitterLayerLine
+    emitter.renderMode = .additive
+    emitter.emitterShape = .line
 
 
     let heart = CAEmitterCell()
@@ -335,9 +335,9 @@ class MainViewController: UIViewController {
     emitter.frame = bounds
     emitter.emitterPosition = CGPoint(x: bounds.midX, y: bounds.midY)
     emitter.emitterSize = CGSize(width: innerBounds.width * 0.5, height: innerBounds.height * 0.5)
-    emitter.renderMode = kCAEmitterLayerAdditive
-    emitter.emitterMode = kCAEmitterLayerOutline
-    emitter.emitterShape = kCAEmitterLayerCircle
+    emitter.renderMode = .additive
+    emitter.emitterMode = .outline
+    emitter.emitterShape = .circle
 
     //
     let fire = CAEmitterCell()
@@ -380,7 +380,7 @@ class MainViewController: UIViewController {
     let bounds = self.effectView.bounds
     let mortor = CAEmitterLayer()
     mortor.emitterPosition = CGPoint(x:bounds.midX, y:bounds.midY)
-    mortor.renderMode = kCAEmitterLayerAdditive
+    mortor.renderMode = .additive
 
     //Invisible particle representing the rocket before the explosion
     let rocket = CAEmitterCell()
